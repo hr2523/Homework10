@@ -1,0 +1,113 @@
+from dice import *
+from game_utilities import *
+
+
+## At minimum, a class consists of the declaration of the class
+## which requires the creation of a block
+class game:
+    None
+    ## minimal definition for a class (we won't really use this one)
+
+
+class dice_game(game):
+    ## class for dice games between
+    ## a player and the computer
+    def __init__(self, game_name):
+        self.score = 0
+        self.game_name = game_name
+        self.die = die(6)
+
+    def __repr__(self):
+        return ('Game: ' + self.game_name + str(utility.get_id_num()))
+
+    def __str__(self):
+        return ('Game: ' + self.game_name)
+
+    def game_over_who_wins(self):
+        None
+
+    def print_score(self):
+        print(self.score)
+
+    def one_turn(self):
+        ## this method represents a single round of the game
+        print('Next Turn')
+
+    def play_game(self):
+        ## This method is invoked to play the game.
+        ## As long as nobody has won the game, it continues.
+        while not (self.game_over_who_wins()):
+            self.one_turn()
+            self.print_score()
+
+
+class war_dice_game(dice_game):
+    def __init__(self, game_name, end_score, cheating=False):
+        self.score = 0
+        self.computer_score = 0
+        self.end_score = end_score
+        if cheating:
+            self.die = cheat_die1(6, 4)
+        else:
+            self.die = die(6)
+        self.computer_die = die(6)
+        print('***This is', game_name + '!')
+
+    def print_score(self):
+        print('Computer has', self.computer_score, 'points.')
+        print('You have', self.score, 'points.')
+
+    def game_over_who_wins(self):
+        if self.computer_score > self.end_score:
+            self.print_score()
+            print('Computer Wins!')
+            return (True)
+        elif self.score > self.end_score:
+            self.print_score()
+            print('You Win!')
+            return (True)
+        else:
+            return (False)
+
+class Boom(war_dice_game):
+    def __init__(self):
+        self.user_sides = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        self.computer_sides = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        self.computer_score = 0
+        self.score = 0
+        print('***This is Boom!')
+
+    def one_turn(self):
+        computer_index = random.randint(0,len(self.computer_sides)-1)
+        computer_roll = die(self.computer_sides[computer_index]).roll()
+        print("computer has chosen die with " + str(self.computer_sides[computer_index]) + " side(s)\n computer rolled: " + str(computer_roll))
+        self.computer_sides.pop(computer_index)
+        option = False
+        choice = 0
+        while not option:
+            choice = input(" your option is: " + str(self.user_sides) + "please input corresponding dice number")
+            choice = int(choice)
+            if choice in self.user_sides:
+                option = True
+            else:
+                print ("you typed unavailable number please try again")
+        user_roll = die(choice).roll()
+        self.user_sides.remove(choice)
+        print("you rolled: " + str(user_roll))
+        if computer_roll > user_roll:
+            self.computer_score += computer_roll
+            print('computer has ' + str(self.computer_score))
+        elif computer_roll < user_roll:
+            self.score += user_roll
+
+    def game_over_who_wins(self):
+        if len(self.user_sides) == 0:
+            self.print_score()
+            if self.computer_score > self.score:
+                print('Computer Wins!')
+                return True
+            if self.computer_score < self.score:
+                print('You Win!')
+                return True
+            else:
+                return False
