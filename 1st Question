@@ -1,0 +1,47 @@
+from turtle import *
+import random
+
+class rainbow_turtle(Turtle):
+    def __init__(self):
+        Turtle.__init__(self)
+        self.pu()
+        self.setpos(0, -300)
+        self.pd()
+
+    def fd(self, distance):
+        extra = distance % 5
+        color = ['red', 'yellow', 'green', 'blue', 'purple']
+        while distance > 0:
+            self.pencolor(color[random.randint(0, 4)])
+            self.forward(5)
+            distance -= 5
+        self.forward(extra)
+
+def test_turtles():
+    global adam1
+    adam1 = rainbow_turtle()
+    adam1.speed(0)
+    for num in range(3):
+        adam1.fd(100)
+        adam1.left(120)
+    adam1.pu()
+    adam1.setpos(0,-200)
+    adam1.pd()
+    for num in range (4):
+        adam1.fd(100)
+        adam1.left(90)
+    adam1.pu()
+    adam1.setpos(0,-100)
+    adam1.pd()
+    for num in range (5):
+        adam1.fd(100)
+        adam1.left(72)
+    adam1.pu()
+    adam1.setpos(0,100)
+    adam1.pd()
+    for num in range (6):
+        adam1.fd(100)
+        adam1.left(60)
+
+
+test_turtles()
